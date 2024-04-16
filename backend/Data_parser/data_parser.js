@@ -1,13 +1,20 @@
-//  Make Data Parser schema here 
+//  Make Data Parser schema here
 const zod = require("zod");
 
-const user_schema = zod.object({
-    username: zod
+const user_parser = zod.object({
+  username: zod
     .string({ required_error: "Name is requires" })
+    .email()
     .trim()
     .min(3, { message: "Length should be minimun 3" }),
-  email: zod.string().email(),
+  firstName: zod.string(),
+  lastName: zod.string(),
   password: zod.string().min(8),
-})
+});
 
-module.exports = {user.schema}
+const login_parser = zod.object({
+  username: zod.string().email(),
+  password: zod.string(),
+});
+
+module.exports = { user_parser, login_parser };

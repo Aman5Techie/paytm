@@ -14,9 +14,9 @@ app.use(express.json()); // PARSER JSON
 const {connectDB} = require("./DataBase/database")
 
 //  Importing Created Router
-const temp = require("./routers/router")
+const user = require("./routers/router")
 
-app.use("/",temp);
+app.use("/api/v1",user);
 
 app.listen(process.env.PORT,()=>{
     console.log(`Listening ON port ${process.env.PORT}`);

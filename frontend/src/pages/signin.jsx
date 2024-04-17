@@ -24,7 +24,7 @@ const Signin = () => {
       username: email,
       password: password,
     };
-
+    
     const {data} = await axios.post(signin,credentials)
     if(!data.status){
       // null

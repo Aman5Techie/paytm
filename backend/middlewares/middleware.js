@@ -64,6 +64,7 @@ const auth_middleware = (req, res, next) => {
   if (!authtoken || !authtoken.startsWith("Bearer ")) {
     res.status(404).json({
       msg: "no token",
+
     });
     return;
   }
@@ -71,9 +72,13 @@ const auth_middleware = (req, res, next) => {
   try {
     const decode = jwt.verify(token, key);
     req.userid = decode.userid;
-    console.log(req.userid);
     next();
-  } catch (error) {}
+  } catch (error) {
+    res.json({
+      status : false,
+      msg : "Invalid token"
+    })
+  }
 };
 
 module.exports = {

@@ -73,4 +73,13 @@ const delete_db = async (req, res) => {
   });
 };
 
-module.exports = { delete_db, get_alluser, signup, login, update_data };
+
+const user_info = async(req,res)=>{
+  const user = await User.findById(req.userid)
+  return res.json({
+    status : true,
+    user
+  })
+}
+
+module.exports = { user_info ,delete_db, get_alluser, signup, login, update_data };

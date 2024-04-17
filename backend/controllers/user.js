@@ -10,15 +10,15 @@ const signup = async (req, res) => {
     // Account Creation
     const user_account = await Account.create({
       userId: create_user["_id"],
-      balance: 1 + Math.random() * 10000,
+      balance: Math.round(1 + Math.random() * 10000),
     });
 
     res.json({
-      status : true,
+      status: true,
       message: "User created successfully",
       token: await create_user.generatetoken(),
-      Account_Number : user_account._id,
-      balance : user_account.balance
+      Account_Number: user_account._id,
+      balance: user_account.balance,
     });
   } catch (error) {
     console.log(error);
@@ -29,7 +29,7 @@ const login = async (req, res) => {
   try {
     const is_user = await User.findOne({ username: req.body.username });
     res.json({
-      status : true,
+      status: true,
       token: await is_user.generatetoken(),
     });
   } catch (err) {
@@ -42,7 +42,7 @@ const update_data = async (req, res) => {
     new: true,
   });
 
-  res.json({ user_,status : true, });
+  res.json({ user_, status: true });
 };
 
 const get_alluser = async (req, res) => {
@@ -50,17 +50,17 @@ const get_alluser = async (req, res) => {
   if (name == undefined) {
     const users = await User.find({});
     res.json({
-      status : true,
+      status: true,
       users,
     });
     return;
   }
   const users = await User.find(
-    { $or: [{ firstName: name }, { lastName: name }] },
+    { $or: [{ firstName: { $regex: name } }, { lastName: { $regex: name } }] },
     { firstName: 1, lastName: 1 }
   );
   res.json({
-    status : true,
+    status: true,
     users,
   });
 };
@@ -68,18 +68,34 @@ const get_alluser = async (req, res) => {
 const delete_db = async (req, res) => {
   const result = await User.deleteMany({});
   res.json({
-    status : true,
+    status: true,
     result,
   });
 };
 
-
-const user_info = async(req,res)=>{
-  const user = await User.findById(req.userid)
+const user_info = async (req, res) => {
+  const user = await User.findById(req.userid);
   return res.json({
-    status : true,
-    user
-  })
-}
+    status: true,
+    user,
+  });
+};
 
-module.exports = { user_info ,delete_db, get_alluser, signup, login, update_data };
+const temp = (req, res) => {
+  
+  console.log(req.headers.authorization);
+  console.log(req.body);
+  res.json({
+    ok: "ok",
+  });
+};
+
+module.exports = {
+  temp,
+  user_info,
+  delete_db,
+  get_alluser,
+  signup,
+  login,
+  update_data,
+};

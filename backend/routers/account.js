@@ -6,6 +6,4 @@ router.use(auth_middleware)
 router.get("/balance",controller.balance)
 router.post("/transfer",controller.transfer)
 
-
-
 module.exports = router

@@ -3,14 +3,15 @@ const { Account } = require("../DataBase/Schema/bankschema");
 
 const balance = async (req, res) => {
   const account = await Account.find({ userId: req.userid });
-  res.json({
-    balance: account[0].balance,
-  });
+  if (account) {
+    res.json({
+      balance: account[0].balance,
+    });
+  }
 };
 
-
 const transfer = async (req, res) => {
-//   Creating a Transaction
+  //   Creating a Transaction
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -31,12 +32,12 @@ const transfer = async (req, res) => {
     });
     return;
   }
-  // Debited Account 
+  // Debited Account
   await Account.updateOne(
-    { userId: form },
+    { userId: from },
     { $inc: { balance: -amount } }
   ).session(session);
-  // Credidit Account 
+  // Credidit Account
   await Account.updateOne(
     { userId: to },
     { $inc: { balance: amount } }
@@ -45,6 +46,7 @@ const transfer = async (req, res) => {
   await session.commitTransaction();
 
   res.json({
+    status: true,
     msg: "transation Successfull",
   });
 };

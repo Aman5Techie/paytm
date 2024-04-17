@@ -4,30 +4,36 @@ import Balance from "../components/balance";
 import User from "../components/user";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import { user_info } from "../../urls";
+import { balance_url, user_info } from "../../urls";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [loading, setloading] = useState(true);
-  const [user,setdata] = useState({})
+  const [user, setdata] = useState({});
+  const [balance, setbalance] = useState("loading...");
   const getdata = async function () {
-    console.log("executes");
-    const { data } = await axios.get(
-      user_info,
-      {
-        headers: {
-          Authorization: localStorage.getItem("Authorization"),
-        },
-      }
-    );
-    setdata(data.user)
+    const { data } = await axios.get(user_info, {
+      headers: {
+        Authorization: localStorage.getItem("Authorization"),
+      },
+    });
+
+    const balance_data = await axios.get(balance_url, {
+      headers: {
+        Authorization: localStorage.getItem("Authorization"),
+      },
+    });
+
+    setbalance(Math.round(balance_data.data.balance));
+    setdata(data.user);
+
     setloading(false);
   };
 
   useEffect(() => {
     getdata();
   }, []);
-  
+
   useEffect(() => {
     if (!localStorage.getItem("Authorization")) {
       navigate("/signin");
@@ -42,8 +48,8 @@ const Dashboard = () => {
       ) : (
         <div>
           <Appbar user={user} />
-          <Balance balance={100000} />
-          <User />
+          <Balance balance={balance} />
+          <User userID={user} />
         </div>
       )}
     </>

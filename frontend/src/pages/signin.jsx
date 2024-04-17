@@ -28,6 +28,7 @@ const Signin = () => {
     const {data} = await axios.post(signin,credentials)
     if(!data.status){
       // null
+      console.log("akdj");
     }
     localStorage.setItem("Authorization",`Bearer ${data.token}`)
     navigate("/dashboard")
@@ -55,7 +56,7 @@ const Signin = () => {
             <Button onClick={login} label={"Sign In"} />
           </div>
           <BottomWarning
-            to={"/sign up"}
+            to={"/signup"}
             label={"Don't have an account"}
             buttonText={"Sign up"}
           />

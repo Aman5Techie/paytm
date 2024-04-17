@@ -9,14 +9,13 @@ app.use(cors());
 // JSON formatting
 app.use(express.json()); // PARSER JSON
 
-
 // DataBase Connectivity 
 const {connectDB} = require("./DataBase/database")
 
 //  Importing Created Router
-const user = require("./routers/router")
+const router = require("./routers/router")
 
-app.use("/api/v1",user);
+app.use("/api/v1",router);
 
 app.listen(process.env.PORT,()=>{
     console.log(`Listening ON port ${process.env.PORT}`);

@@ -1,17 +1,11 @@
-const { Router } = require("express");
-const controllers = require("../controllers/controller");
+const express = require("express")
+const router = express.Router();
 
-const middlewares = require("../middlewares/middleware");
-const user_controller = require("../controllers/user");
+const user = require("./user")
+const account = require("./account")
 
-const router = Router();
 
-router
-  .route("/")
-  .get(middlewares.temp_middleware, controllers.basic_controller);
+router.use("/user",user)
+router.use("/account",account)
 
-router.post("/signup", middlewares.signup_midleware, user_controller.signup);
-router.post("/login", middlewares.login_midleware, user_controller.login);
-router.put("/user" , middlewares.auth_middleware,user_controller.update_data)
-router.get("/user/bulk" , user_controller.get_alluser)
-module.exports = router;
+module.exports = router
